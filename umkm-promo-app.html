@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#FF5722">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="UMKM Promo">
+<meta name="description" content="Temukan Kuliner UMKM Grand Opening Terbaik">
+<title>UMKM Promo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #FF5722;
+  --primary-dark: #E64A19;
+  --primary-light: #FF8A65;
+  --accent: #FFC107;
+  --bg: #F5F5F5;
+  --card: #FFFFFF;
+  --text: #212121;
+  --text2: #757575;
+  --text3: #BDBDBD;
+  --border: #EEEEEE;
+  --success: #4CAF50;
+  --info: #2196F3;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 24px rgba(0,0,0,0.12);
+  --font-head: 'Nunito', sans-serif;
+  --font-body: 'Poppins', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; background: #000; }
+body { font-family: var(--font-body); color: var(--text); }
+
+/* ===================== SCREENS ===================== */
+.screen { position: fixed; inset: 0; display: none; flex-direction: column; background: var(--bg); overflow: hidden; transition: opacity 0.3s; }
+.screen.active { display: flex; }
+
+/* ===================== SPLASH ===================== */
+#splash { background: linear-gradient(160deg, #FF5722 0%, #FF9800 60%, #FFC107 100%); align-items: center; justify-content: center; gap: 0; }
+.splash-circles { position: absolute; inset: 0; overflow: hidden; }
+.splash-circles span { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.07); }
+.splash-circles span:nth-child(1) { width: 300px; height: 300px; top: -100px; right: -80px; }
+.splash-circles span:nth-child(2) { width: 200px; height: 200px; bottom: -60px; left: -50px; }
+.splash-circles span:nth-child(3) { width: 120px; height: 120px; top: 40%; left: 10%; }
+.splash-logo { z-index: 1; text-align: center; animation: splashIn 0.6s ease both; }
+.splash-icon { width: 90px; height: 90px; background: white; border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 44px; margin: 0 auto 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+.splash-title { font-family: var(--font-head); font-weight: 900; font-size: 32px; color: white; letter-spacing: -1px; }
+.splash-sub { font-size: 14px; color: rgba(255,255,255,0.8); margin-top: 6px; font-weight: 500; }
+.splash-loader { z-index: 1; margin-top: 60px; display: flex; gap: 6px; animation: splashIn 0.6s 0.3s ease both; opacity: 0; }
+.splash-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.5); animation: dotPulse 1.2s infinite; }
+.splash-dot:nth-child(2) { animation-delay: 0.2s; }
+.splash-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotPulse { 0%,80%,100% { transform: scale(0.8); opacity: 0.5; } 40% { transform: scale(1.2); opacity: 1; } }
+@keyframes splashIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+/* ===================== ONBOARD ===================== */
+#onboard { background: white; }
+.onboard-slides { flex: 1; overflow: hidden; position: relative; }
+.onboard-slide { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; opacity: 0; transform: translateX(60px); transition: all 0.4s cubic-bezier(0.4,0,0.2,1); pointer-events: none; }
+.onboard-slide.active { opacity: 1; transform: none; pointer-events: auto; }
+.onboard-slide.exit { opacity: 0; transform: translateX(-60px); }
+.onboard-art { font-size: 100px; margin-bottom: 2rem; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.1)); }
+.onboard-title { font-family: var(--font-head); font-weight: 900; font-size: 26px; color: var(--text); text-align: center; line-height: 1.2; margin-bottom: 12px; }
+.onboard-desc { font-size: 14px; color: var(--text2); text-align: center; line-height: 1.7; max-width: 280px; }
+.onboard-bottom { padding: 1.5rem 2rem 2.5rem; background: white; }
+.dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 1.5rem; }
+.dot { width: 8px; height: 8px; border-radius: 4px; background: var(--border); transition: all 0.3s; }
+.dot.active { width: 24px; background: var(--primary); }
+.btn-full { width: 100%; padding: 16px; border-radius: var(--radius); border: none; font-family: var(--font-head); font-weight: 800; font-size: 16px; cursor: pointer; transition: all 0.2s; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:active { background: var(--primary-dark); transform: scale(0.98); }
+.btn-ghost { background: transparent; color: var(--text2); font-size: 14px; margin-top: 8px; }
+
+/* ===================== LOGIN ===================== */
+#login { background: white; overflow-y: auto; }
+.login-header { background: linear-gradient(135deg, #FF5722, #FF9800); padding: 3rem 1.5rem 2.5rem; text-align: center; }
+.login-icon { width: 64px; height: 64px; background: rgba(255,255,255,0.2); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 12px; }
+.login-title { font-family: var(--font-head); font-weight: 900; font-size: 22px; color: white; }
+.login-sub { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 4px; }
+.login-body { padding: 2rem 1.5rem; }
+.form-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; display: block; }
+.form-input-wrap { position: relative; margin-bottom: 1.2rem; }
+.form-input { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 15px; color: var(--text); background: #FAFAFA; outline: none; transition: border-color 0.2s; }
+.form-input:focus { border-color: var(--primary); background: white; }
+.form-input::placeholder { color: var(--text3); }
+.input-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; }
+.login-divider { display: flex; align-items: center; gap: 12px; margin: 1.5rem 0; }
+.login-divider span { font-size: 12px; color: var(--text3); white-space: nowrap; }
+.login-divider::before, .login-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.social-btn { width: 100%; padding: 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: white; font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; margin-bottom: 10px; transition: background 0.2s; }
+.social-btn:active { background: #F5F5F5; }
+.login-register { text-align: center; font-size: 13px; color: var(--text2); margin-top: 1.2rem; }
+.login-register a { color: var(--primary); font-weight: 700; cursor: pointer; }
+
+/* ===================== MAIN APP ===================== */
+#app { background: var(--bg); }
+.app-content { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; padding-bottom: 80px; }
+.app-content::-webkit-scrollbar { display: none; }
+
+/* TOP BAR */
+.topbar { background: white; padding: 14px 16px 12px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 0 var(--border); }
+.topbar-left { display: flex; align-items: center; gap: 10px; }
+.topbar-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #FF5722, #FF9800); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; color: white; font-family: var(--font-head); }
+.topbar-greeting { font-size: 11px; color: var(--text2); }
+.topbar-name { font-family: var(--font-head); font-weight: 800; font-size: 14px; color: var(--text); line-height: 1.2; }
+.topbar-right { display: flex; gap: 8px; }
+.icon-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--bg); border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; position: relative; }
+.badge { position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; border: 1.5px solid white; }
+
+/* SEARCH BAR */
+.search-bar { background: white; padding: 0 16px 14px; }
+.search-input-wrap { background: var(--bg); border-radius: 12px; display: flex; align-items: center; padding: 10px 14px; gap: 8px; }
+.search-input-wrap input { border: none; background: transparent; flex: 1; font-family: var(--font-body); font-size: 14px; color: var(--text); outline: none; }
+.search-input-wrap input::placeholder { color: var(--text3); }
+.search-mic { font-size: 16px; color: var(--text3); }
+
+/* BANNER */
+.banner-section { padding: 16px 16px 0; }
+.banner-card { border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, #1A237E 0%, #283593 50%, #3949AB 100%); padding: 20px; position: relative; display: flex; align-items: center; justify-content: space-between; }
+.banner-card::before { content: ''; position: absolute; top: -30px; right: 60px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+.banner-card::after { content: ''; position: absolute; bottom: -20px; right: 10px; width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.banner-pill { display: inline-flex; align-items: center; gap: 4px; background: var(--accent); color: #1A1A1A; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
+.banner-title { font-family: var(--font-head); font-weight: 900; font-size: 20px; color: white; line-height: 1.2; margin-bottom: 4px; }
+.banner-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-bottom: 14px; }
+.banner-cta { background: var(--primary); color: white; border: none; border-radius: 10px; padding: 9px 18px; font-family: var(--font-head); font-weight: 800; font-size: 13px; cursor: pointer; }
+.banner-emoji { font-size: 64px; position: relative; z-index: 1; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3)); }
+.banner-dots { display: flex; gap: 5px; justify-content: center; margin-top: 12px; }
+.banner-dot { width: 6px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.3); transition: all 0.3s; }
+.banner-dot.active { width: 18px; background: white; }
+
+/* STATS ROW */
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; padding: 16px 16px 0; }
+.stat-box { background: white; border-radius: var(--radius-sm); padding: 12px; text-align: center; box-shadow: var(--shadow); }
+.stat-num { font-family: var(--font-head); font-weight: 900; font-size: 20px; color: var(--primary); }
+.stat-lbl { font-size: 10px; color: var(--text2); margin-top: 2px; font-weight: 500; }
+
+/* SECTION */
+.sec { padding: 20px 16px 0; }
+.sec-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.sec-title { font-family: var(--font-head); font-weight: 800; font-size: 16px; color: var(--text); }
+.sec-all { font-size: 12px; color: var(--primary); font-weight: 700; background: none; border: none; cursor: pointer; font-family: var(--font-body); padding: 4px 8px; background: rgba(255,87,34,0.08); border-radius: 8px; }
+
+/* CATEGORY CHIPS */
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { display: flex; flex-direction: column; align-items: center; gap: 4px; background: white; border: none; border-radius: 12px; padding: 10px 14px; cursor: pointer; flex-shrink: 0; box-shadow: var(--shadow); transition: all 0.2s; }
+.chip.active { background: var(--primary); }
+.chip-icon { font-size: 22px; }
+.chip-label { font-size: 10px; font-weight: 700; color: var(--text2); white-space: nowrap; font-family: var(--font-body); }
+.chip.active .chip-label { color: white; }
+
+/* HORIZONTAL SCROLL CARDS */
+.hscroll { display: flex; gap: 12px; overflow-x: auto; padding: 0 16px 4px; scrollbar-width: none; }
+.hscroll::-webkit-scrollbar { display: none; }
+
+/* PROMO CARD (horizontal) */
+.promo-card { flex-shrink: 0; width: 160px; background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); cursor: pointer; transition: transform 0.15s; }
+.promo-card:active { transform: scale(0.96); }
+.promo-card-img { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 44px; position: relative; }
+.promo-card-body { padding: 10px 10px 12px; }
+.promo-card-name { font-family: var(--font-head); font-weight: 800; font-size: 12px; color: var(--text); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.promo-card-store { font-size: 10px; color: var(--text2); margin-bottom: 6px; }
+.promo-card-bottom { display: flex; justify-content: space-between; align-items: center; }
+.promo-price { font-family: var(--font-head); font-weight: 900; font-size: 13px; color: var(--primary); }
+.promo-original { font-size: 10px; color: var(--text3); text-decoration: line-through; }
+.promo-star { font-size: 10px; color: var(--text2); display: flex; align-items: center; gap: 2px; }
+
+/* LIST CARD */
+.list-card { background: white; border-radius: var(--radius); padding: 12px; display: flex; gap: 12px; align-items: center; box-shadow: var(--shadow); cursor: pointer; transition: transform 0.15s; }
+.list-card:active { transform: scale(0.98); }
+.list-card + .list-card { margin-top: 10px; }
+.lc-img { width: 72px; height: 72px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 36px; flex-shrink: 0; }
+.lc-info { flex: 1; min-width: 0; }
+.lc-name { font-family: var(--font-head); font-weight: 800; font-size: 13px; color: var(--text); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lc-store { font-size: 11px; color: var(--text2); margin-bottom: 5px; }
+.lc-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+.tag-new { background: #FFF3E0; color: #E65100; }
+.tag-hot { background: #FFEBEE; color: #C62828; }
+.tag-promo { background: #E8F5E9; color: #2E7D32; }
+.tag-free { background: #E3F2FD; color: #1565C0; }
+.lc-right { flex-shrink: 0; text-align: right; }
+.lc-price { font-family: var(--font-head); font-weight: 900; font-size: 14px; color: var(--primary); }
+.lc-orig { font-size: 10px; color: var(--text3); text-decoration: line-through; display: block; margin-bottom: 4px; }
+.add-btn { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 6px 12px; font-family: var(--font-head); font-weight: 800; font-size: 11px; cursor: pointer; }
+.add-btn:active { background: var(--primary-dark); }
+
+/* BADGES */
+.new-badge, .hot-badge { position: absolute; top: 8px; left: 8px; font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 6px; }
+.new-badge { background: var(--primary); color: white; }
+.hot-badge { background: #E53935; color: white; }
+.fav-btn { position: absolute; top: 6px; right: 6px; background: white; border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+/* DISCOUNT RIBBON */
+.disc-ribbon { position: absolute; bottom: 6px; right: 6px; background: var(--accent); color: #1A1A1A; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 5px; }
+
+/* BOTTOM NAV */
+.bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: white; border-top: 1px solid var(--border); display: flex; z-index: 50; padding-bottom: env(safe-area-inset-bottom, 0); box-shadow: 0 -4px 20px rgba(0,0,0,0.06); }
+.nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 0 8px; background: none; border: none; cursor: pointer; gap: 3px; position: relative; }
+.nav-icon { font-size: 22px; transition: transform 0.2s; }
+.nav-label { font-size: 10px; font-weight: 700; color: var(--text3); font-family: var(--font-body); }
+.nav-btn.active .nav-label { color: var(--primary); }
+.nav-btn.active .nav-icon { transform: translateY(-2px); }
+.nav-center { background: var(--primary); border-radius: 50%; width: 52px; height: 52px; margin-top: -20px; box-shadow: 0 4px 16px rgba(255,87,34,0.4); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+.nav-badge { position: absolute; top: 6px; right: calc(50% - 18px); width: 16px; height: 16px; background: var(--primary); border-radius: 50%; font-size: 9px; font-weight: 800; color: white; display: flex; align-items: center; justify-content: center; border: 1.5px solid white; }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
+.modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+.modal-sheet { background: white; border-radius: 24px 24px 0 0; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.35s cubic-bezier(0.4,0,0.2,1); padding-bottom: env(safe-area-inset-bottom, 20px); }
+.modal-sheet::-webkit-scrollbar { display: none; }
+.modal-handle-wrap { display: flex; justify-content: center; padding: 12px 0 0; }
+.modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; }
+.modal-img-big { margin: 16px; border-radius: 18px; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 80px; }
+.modal-body { padding: 0 20px 20px; }
+.modal-badges { display: flex; gap: 6px; margin-bottom: 10px; }
+.modal-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; }
+.modal-name { font-family: var(--font-head); font-weight: 900; font-size: 22px; color: var(--text); margin-bottom: 4px; }
+.modal-store { font-size: 13px; color: var(--text2); margin-bottom: 12px; display: flex; align-items: center; gap: 4px; }
+.modal-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 16px; }
+.modal-stat { background: var(--bg); border-radius: 10px; padding: 10px; text-align: center; }
+.modal-stat-val { font-family: var(--font-head); font-weight: 800; font-size: 15px; color: var(--text); }
+.modal-stat-key { font-size: 10px; color: var(--text2); margin-top: 2px; }
+.modal-desc-title { font-family: var(--font-head); font-weight: 800; font-size: 14px; margin-bottom: 6px; }
+.modal-desc-text { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 20px; }
+.modal-price-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; background: #FFF3E0; border-radius: 14px; padding: 14px 16px; }
+.modal-price { font-family: var(--font-head); font-weight: 900; font-size: 26px; color: var(--primary); }
+.modal-disc { background: var(--accent); color: #1A1A1A; font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 8px; }
+.modal-orig { font-size: 12px; color: var(--text3); text-decoration: line-through; }
+.modal-cta { display: flex; gap: 10px; }
+.btn-wish { flex: 0 0 50px; height: 50px; border: 1.5px solid var(--border); border-radius: 14px; background: white; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.btn-order { flex: 1; background: var(--primary); color: white; border: none; border-radius: 14px; font-family: var(--font-head); font-weight: 800; font-size: 15px; cursor: pointer; padding: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-order:active { background: var(--primary-dark); }
+
+/* TOAST */
+.toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(10px); background: #212121; color: white; padding: 11px 20px; border-radius: 24px; font-size: 13px; font-weight: 600; font-family: var(--font-body); opacity: 0; pointer-events: none; transition: all 0.3s; z-index: 300; white-space: nowrap; box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* CART BADGE */
+.cart-count { display: none; position: fixed; bottom: 80px; right: 20px; background: var(--primary); color: white; width: 46px; height: 46px; border-radius: 50%; font-family: var(--font-head); font-weight: 900; font-size: 16px; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(255,87,34,0.4); z-index: 100; cursor: pointer; animation: popIn 0.3s cubic-bezier(0.4,0,0.2,1); }
+.cart-count.visible { display: flex; }
+
+/* ANIMATIONS */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+
+/* BG COLORS */
+.bg-orange { background: #FFF3E0; }
+.bg-red { background: #FFEBEE; }
+.bg-green { background: #E8F5E9; }
+.bg-blue { background: #E3F2FD; }
+.bg-purple { background: #F3E5F5; }
+.bg-yellow { background: #FFFDE7; }
+.bg-teal { background: #E0F2F1; }
+.bg-pink { background: #FCE4EC; }
+.bg-indigo { background: #E8EAF6; }
+
+/* PAGE TRANSITIONS */
+.page-enter { animation: pageIn 0.3s ease; }
+@keyframes pageIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: none; } }
+
+/* INSTALL BANNER */
+.install-banner { margin: 16px 16px 0; background: linear-gradient(135deg, #E8F5E9, #C8E6C9); border-radius: var(--radius); padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.install-icon { font-size: 28px; }
+.install-text { flex: 1; }
+.install-title { font-family: var(--font-head); font-weight: 800; font-size: 13px; color: #1B5E20; }
+.install-sub { font-size: 11px; color: #388E3C; margin-top: 2px; }
+.install-btn { background: var(--success); color: white; border: none; border-radius: 8px; padding: 7px 14px; font-family: var(--font-head); font-weight: 800; font-size: 12px; cursor: pointer; white-space: nowrap; }
+.install-close { background: none; border: none; font-size: 16px; color: #4CAF50; cursor: pointer; padding: 0; }
+</style>
+</head>
+<body>
+
+<!-- ========== SPLASH ========== -->
+<div class="screen active" id="splash">
+  <div class="splash-circles">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="splash-logo">
+    <div class="splash-icon">🍜</div>
+    <div class="splash-title">UMKM Promo</div>
+    <div class="splash-sub">Kuliner Grand Opening Terbaik</div>
+  </div>
+  <div class="splash-loader">
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+  </div>
+</div>
+
+<!-- ========== ONBOARDING ========== -->
+<div class="screen" id="onboard">
+  <div class="onboard-slides">
+    <div class="onboard-slide active" id="slide0">
+      <div class="onboard-art">🎊</div>
+      <div class="onboard-title">Temukan Kuliner UMKM Baru</div>
+      <div class="onboard-desc">Ratusan UMKM makanan grand opening setiap hari dengan promo spesial hanya untuk kamu!</div>
+    </div>
+    <div class="onboard-slide" id="slide1">
+      <div class="onboard-art">💰</div>
+      <div class="onboard-title">Hemat Sampai 50% Diskon</div>
+      <div class="onboard-desc">Dapatkan promo eksklusif, voucher gratis ongkir, dan cashback menarik dari UMKM pilihan.</div>
+    </div>
+    <div class="onboard-slide" id="slide2">
+      <div class="onboard-art">🛵</div>
+      <div class="onboard-title">Pesan & Nikmati Sekarang</div>
+      <div class="onboard-desc">Pesan langsung dari aplikasi, ambil sendiri atau antar ke rumahmu. Cepat, mudah, dan terpercaya!</div>
+    </div>
+  </div>
+  <div class="onboard-bottom">
+    <div class="dots">
+      <div class="dot active" id="d0"></div>
+      <div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div>
+    </div>
+    <button class="btn-full btn-primary" id="onboardNextBtn" onclick="onboardNext()">Mulai Sekarang →</button>
+    <button class="btn-full btn-ghost" id="onboardSkipBtn" onclick="goLogin()">Lewati</button>
+  </div>
+</div>
+
+<!-- ========== LOGIN ========== -->
+<div class="screen" id="login">
+  <div class="login-header">
+    <div class="login-icon">🍜</div>
+    <div class="login-title">Masuk ke UMKM Promo</div>
+    <div class="login-sub">Temukan kuliner grand opening terbaik</div>
+  </div>
+  <div class="login-body">
+    <label class="form-label">Nomor HP / Email</label>
+    <div class="form-input-wrap">
+      <input class="form-input" type="text" placeholder="08xxxxxxxxxx atau email@..." id="loginPhone">
+      <span class="input-icon">📱</span>
+    </div>
+    <label class="form-label">Password</label>
+    <div class="form-input-wrap">
+      <input class="form-input" type="password" placeholder="Masukkan password" id="loginPass">
+      <span class="input-icon" style="cursor:pointer" onclick="togglePass()">👁</span>
+    </div>
+    <div style="text-align:right;margin-bottom:1.5rem;margin-top:-0.5rem;">
+      <a style="font-size:12px;color:var(--primary);font-weight:700;cursor:pointer;">Lupa password?</a>
+    </div>
+    <button class="btn-full btn-primary" onclick="doLogin()">Masuk</button>
+    <div class="login-divider"><span>atau lanjut dengan</span></div>
+    <button class="social-btn" onclick="doSocialLogin('Google')">
+      <span style="font-size:20px;">🌐</span> Lanjutkan dengan Google
+    </button>
+    <button class="social-btn" onclick="doSocialLogin('Facebook')">
+      <span style="font-size:20px;">👤</span> Lanjutkan dengan Facebook
+    </button>
+    <div class="login-register">Belum punya akun? <a onclick="showToast('📝 Halaman daftar dibuka')">Daftar Gratis</a></div>
+  </div>
+</div>
+
+<!-- ========== MAIN APP ========== -->
+<div class="screen" id="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-avatar" id="userAvatar">A</div>
+      <div>
+        <div class="topbar-greeting">Selamat datang kembali 👋</div>
+        <div class="topbar-name" id="userName">Pengguna</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn" onclick="showToast('🔔 3 notifikasi baru')">🔔<div class="badge"></div></button>
+      <button class="icon-btn" onclick="showToast('💬 Buka pesan')">💬</button>
+    </div>
+  </div>
+
+  <!-- SCROLLABLE CONTENT -->
+  <div class="app-content" id="appContent">
+
+    <!-- SEARCH -->
+    <div class="search-bar">
+      <div class="search-input-wrap">
+        <span style="font-size:16px;color:var(--text3)">🔍</span>
+        <input type="text" placeholder="Cari makanan, toko, promo..." id="searchInp" oninput="liveSearch()">
+        <span class="search-mic">🎙</span>
+      </div>
+    </div>
+
+    <!-- INSTALL BANNER -->
+    <div class="install-banner" id="installBanner" onclick="showToast('📲 Menambahkan ke layar utama...')">
+      <div class="install-icon">📲</div>
+      <div class="install-text">
+        <div class="install-title">Pasang di HP kamu!</div>
+        <div class="install-sub">Tambah ke layar utama untuk akses lebih cepat</div>
+      </div>
+      <button class="install-btn">Pasang</button>
+      <button class="install-close" onclick="event.stopPropagation();document.getElementById('installBanner').remove()">✕</button>
+    </div>
+
+    <!-- BANNER -->
+    <div class="banner-section">
+      <div class="banner-card">
+        <div>
+          <div class="banner-pill">🎊 GRAND OPENING WEEK</div>
+          <div class="banner-title">Promo Spesial<br>Minggu Ini!</div>
+          <div class="banner-sub">Diskon hingga 50% untuk UMKM baru</div>
+          <button class="banner-cta" onclick="showToast('🎁 Voucher diskon diaktifkan!')">Klaim Promo</button>
+        </div>
+        <div class="banner-emoji">🎉</div>
+      </div>
+      <div class="banner-dots">
+        <div class="banner-dot active"></div>
+        <div class="banner-dot"></div>
+        <div class="banner-dot"></div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num" id="statNew">24</div><div class="stat-lbl">UMKM Baru</div></div>
+      <div class="stat-box"><div class="stat-num">50%</div><div class="stat-lbl">Maks Diskon</div></div>
+      <div class="stat-box"><div class="stat-num">⭐4.8</div><div class="stat-lbl">Rata-rata</div></div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="sec">
+      <div class="sec-head">
+        <span class="sec-title">Kategori</span>
+      </div>
+      <div class="chips" id="chips">
+        <button class="chip active" onclick="filterCat(this,'semua')"><span class="chip-icon">🍽</span><span class="chip-label">Semua</span></button>
+        <button class="chip" onclick="filterCat(this,'berat')"><span class="chip-icon">🍛</span><span class="chip-label">Makanan</span></button>
+        <button class="chip" onclick="filterCat(this,'minuman')"><span class="chip-icon">🧋</span><span class="chip-label">Minuman</span></button>
+        <button class="chip" onclick="filterCat(this,'snack')"><span class="chip-icon">🍿</span><span class="chip-label">Snack</span></button>
+        <button class="chip" onclick="filterCat(this,'dessert')"><span class="chip-icon">🍰</span><span class="chip-label">Dessert</span></button>
+        <button class="chip" onclick="filterCat(this,'sarapan')"><span class="chip-icon">☀️</span><span class="chip-label">Sarapan</span></button>
+      </div>
+    </div>
+
+    <!-- NEW OPENING HORIZONTAL -->
+    <div class="sec">
+      <div class="sec-head">
+        <span class="sec-title">⭐ Baru Opening</span>
+        <button class="sec-all" onclick="showToast('📋 Semua UMKM baru')">Lihat Semua →</button>
+      </div>
+    </div>
+    <div class="hscroll" id="hscroll">
+      <div class="promo-card" data-cat="berat" onclick="openModal(this)" data-name="Nasi Padang Spesial" data-store="Warung Bu Sari" data-emoji="🍛" data-bg="bg-orange" data-price="15000" data-orig="25000" data-rating="4.9" data-sold="248" data-est="15 mnt" data-desc="Nasi padang dengan rendang, gulai ayam, dan sayur nangka. Resep turun-temurun dari Minangkabau. Grand opening perdana!" data-badge="new">
+        <div class="promo-card-img bg-orange">🍛<div class="new-badge">BARU</div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)">🤍</button><div class="disc-ribbon">-40%</div></div>
+        <div class="promo-card-body">
+          <div class="promo-card-name">Nasi Padang Spesial</div>
+          <div class="promo-card-store">Warung Bu Sari</div>
+          <div class="promo-card-bottom">
+            <div><div class="promo-price">Rp15k</div><div class="promo-original">Rp25k</div></div>
+            <div class="promo-star">⭐4.9</div>
+          </div>
+        </div>
+      </div>
+      <div class="promo-card" data-cat="minuman" onclick="openModal(this)" data-name="Brown Sugar Boba" data-store="Boba Kekinian Mira" data-emoji="🧋" data-bg="bg-pink" data-price="10000" data-orig="18000" data-rating="4.8" data-sold="312" data-est="10 mnt" data-desc="Boba premium dengan brown sugar homemade, topping pearl kenyal, dan susu segar pilihan. Pertama kali buka di Pekanbaru!" data-badge="new">
+        <div class="promo-card-img bg-pink">🧋<div class="new-badge">BARU</div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)">🤍</button><div class="disc-ribbon">-44%</div></div>
+        <div class="promo-card-body">
+          <div class="promo-card-name">Brown Sugar Boba</div>
+          <div class="promo-card-store">Boba Kekinian Mira</div>
+          <div class="promo-card-bottom">
+            <div><div class="promo-price">Rp10k</div><div class="promo-original">Rp18k</div></div>
+            <div class="promo-star">⭐4.8</div>
+          </div>
+        </div>
+      </div>
+      <div class="promo-card" data-cat="berat" onclick="openModal(this)" data-name="Mie Ayam Bakso" data-store="Pak Budi Noodle" data-emoji="🍜" data-bg="bg-yellow" data-price="12000" data-orig="20000" data-rating="4.7" data-sold="189" data-est="12 mnt" data-desc="Mie ayam kenyal dengan bakso daging sapi asli, kuah kaldu gurih, dan topping ceker. Resep rahasia 20 tahun baru pertama kali dibuka!" data-badge="hot">
+        <div class="promo-card-img bg-yellow">🍜<div class="hot-badge">HOT🔥</div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)">🤍</button><div class="disc-ribbon">-40%</div></div>
+        <div class="promo-card-body">
+          <div class="promo-card-name">Mie Ayam Bakso</div>
+          <div class="promo-card-store">Pak Budi Noodle</div>
+          <div class="promo-card-bottom">
+            <div><div class="promo-price">Rp12k</div><div class="promo-original">Rp20k</div></div>
+            <div class="promo-star">⭐4.7</div>
+          </div>
+        </div>
+      </div>
+      <div class="promo-card" data-cat="dessert" onclick="openModal(this)" data-name="Martabak Coklat" data-store="Kak Rini Sweet" data-emoji="🥞" data-bg="bg-blue" data-price="22000" data-orig="35000" data-rating="4.8" data-sold="156" data-est="20 mnt" data-desc="Martabak manis super tebal dengan coklat premium, keju leleh, dan berbagai topping pilihan. Opening perdana dengan harga spesial!" data-badge="new">
+        <div class="promo-card-img bg-blue">🥞<div class="new-badge">BARU</div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)">🤍</button><div class="disc-ribbon">-37%</div></div>
+        <div class="promo-card-body">
+          <div class="promo-card-name">Martabak Coklat</div>
+          <div class="promo-card-store">Kak Rini Sweet</div>
+          <div class="promo-card-bottom">
+            <div><div class="promo-price">Rp22k</div><div class="promo-original">Rp35k</div></div>
+            <div class="promo-star">⭐4.8</div>
+          </div>
+        </div>
+      </div>
+      <div class="promo-card" data-cat="minuman" onclick="openModal(this)" data-name="Kopi Susu Aren" data-store="Kopi Corner Dika" data-emoji="☕" data-bg="bg-teal" data-price="12000" data-orig="20000" data-rating="4.9" data-sold="421" data-est="8 mnt" data-desc="Kopi arabika lokal dengan gula aren asli dan susu full cream. Dibuat dengan espresso machine premium. Kafe baru hits wajib dicoba!" data-badge="hot">
+        <div class="promo-card-img bg-teal">☕<div class="hot-badge">HOT🔥</div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)">🤍</button><div class="disc-ribbon">-40%</div></div>
+        <div class="promo-card-body">
+          <div class="promo-card-name">Kopi Susu Aren</div>
+          <div class="promo-card-store">Kopi Corner Dika</div>
+          <div class="promo-card-bottom">
+            <div><div class="promo-price">Rp12k</div><div class="promo-original">Rp20k</div></div>
+            <div class="promo-star">⭐4.9</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALL PROMO LIST -->
+    <div class="sec">
+      <div class="sec-head">
+        <span class="sec-title">🏷 Semua Promo</span>
+        <button class="sec-all" onclick="showToast('📋 Semua promo tersedia')">Lihat Semua →</button>
+      </div>
+      <div id="listArea">
+        <div class="list-card" data-cat="berat" onclick="openModal(this)" data-name="Soto Ayam Lamongan" data-store="UMKM Pak Joko" data-emoji="🍲" data-bg="bg-yellow" data-price="12000" data-orig="20000" data-rating="4.9" data-sold="304" data-est="15 mnt" data-desc="Soto kuning khas Lamongan dengan ayam kampung, lontong, telur, dan sambal petis asli. Baru dibuka minggu ini!" data-badge="new">
+          <div class="lc-img bg-yellow">🍲</div>
+          <div class="lc-info">
+            <div class="lc-name">Soto Ayam Lamongan</div>
+            <div class="lc-store">📍 UMKM Pak Joko</div>
+            <div class="lc-tags"><span class="tag tag-new">BARU</span><span class="tag tag-promo">DISKON 40%</span></div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-orig">Rp20k</div>
+            <div class="lc-price">Rp12k</div>
+            <button class="add-btn" onclick="event.stopPropagation();addCart()">+ Pesan</button>
+          </div>
+        </div>
+        <div class="list-card" data-cat="snack" onclick="openModal(this)" data-name="Gorengan Crispy Mix" data-store="Dapur Ibu Yanti" data-emoji="🍟" data-bg="bg-orange" data-price="8000" data-orig="15000" data-rating="4.6" data-sold="512" data-est="10 mnt" data-desc="Paket gorengan mix: tempe, tahu, pisang, dan bakwan dengan tepung crispy spesial. Cocok untuk cemilan harian!" data-badge="hot">
+          <div class="lc-img bg-orange">🍟</div>
+          <div class="lc-info">
+            <div class="lc-name">Gorengan Crispy Mix</div>
+            <div class="lc-store">📍 Dapur Ibu Yanti</div>
+            <div class="lc-tags"><span class="tag tag-new">BARU</span><span class="tag tag-hot">HOT 🔥</span></div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-orig">Rp15k</div>
+            <div class="lc-price">Rp8k</div>
+            <button class="add-btn" onclick="event.stopPropagation();addCart()">+ Pesan</button>
+          </div>
+        </div>
+        <div class="list-card" data-cat="minuman" onclick="openModal(this)" data-name="Es Teh Jumbo Manis" data-store="Warung Teh Aziz" data-emoji="🍵" data-bg="bg-green" data-price="5000" data-orig="10000" data-rating="4.7" data-sold="891" data-est="5 mnt" data-desc="Es teh manis jumbo dengan daun teh pilihan, gula aren asli, dan es batu segar. Minuman wajib sehari-hari!" data-badge="new">
+          <div class="lc-img bg-green">🍵</div>
+          <div class="lc-info">
+            <div class="lc-name">Es Teh Jumbo Manis</div>
+            <div class="lc-store">📍 Warung Teh Aziz</div>
+            <div class="lc-tags"><span class="tag tag-new">BARU</span><span class="tag tag-free">GRATIS ES</span></div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-orig">Rp10k</div>
+            <div class="lc-price">Rp5k</div>
+            <button class="add-btn" onclick="event.stopPropagation();addCart()">+ Pesan</button>
+          </div>
+        </div>
+        <div class="list-card" data-cat="sarapan" onclick="openModal(this)" data-name="Nasi Uduk Komplit" data-store="Sarapan Pagi Bu Eni" data-emoji="🍚" data-bg="bg-purple" data-price="13000" data-orig="22000" data-rating="4.8" data-sold="276" data-est="15 mnt" data-desc="Nasi uduk gurih dengan lauk lengkap: ayam goreng, tempe orek, sambal kacang, dan kerupuk. Sarapan terenak di Pekanbaru!" data-badge="new">
+          <div class="lc-img bg-purple">🍚</div>
+          <div class="lc-info">
+            <div class="lc-name">Nasi Uduk Komplit</div>
+            <div class="lc-store">📍 Sarapan Pagi Bu Eni</div>
+            <div class="lc-tags"><span class="tag tag-new">BARU</span><span class="tag tag-promo">DISKON 41%</span></div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-orig">Rp22k</div>
+            <div class="lc-price">Rp13k</div>
+            <button class="add-btn" onclick="event.stopPropagation();addCart()">+ Pesan</button>
+          </div>
+        </div>
+        <div class="list-card" data-cat="berat" onclick="openModal(this)" data-name="Ayam Geprek Pedas" data-store="Geprek Mas Rizky" data-emoji="🍗" data-bg="bg-red" data-price="14000" data-orig="25000" data-rating="4.8" data-sold="634" data-est="12 mnt" data-desc="Ayam goreng crispy digeprek dengan sambal bawang super pedas, nasi hangat, dan lalapan segar. Level pedas 1-10 tersedia!" data-badge="hot">
+          <div class="lc-img bg-red">🍗</div>
+          <div class="lc-info">
+            <div class="lc-name">Ayam Geprek Pedas</div>
+            <div class="lc-store">📍 Geprek Mas Rizky</div>
+            <div class="lc-tags"><span class="tag tag-hot">HOT 🔥</span><span class="tag tag-promo">DISKON 44%</span></div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-orig">Rp25k</div>
+            <div class="lc-price">Rp14k</div>
+            <button class="add-btn" onclick="event.stopPropagation();addCart()">+ Pesan</button>
+          </div>
+        </div>
+        <div class="list-card" data-cat="dessert" onclick="openModal(this)" data-name="Klepon Ubi Ungu" data-store="Jajanan Tradisional Sari" data-emoji="🫐" data-bg="bg-purple" data-price="10000" data-orig="18000" data-rating="4.9" data-sold="198" data-est="10 mnt" data-desc="Klepon modern isi ubi ungu dengan parutan kelapa segar dan gula merah leleh. Jajanan tradisional hits kekinian!" data-badge="new">
+          <div class="lc-img bg-purple">🫐</div>
+          <div class="lc-info">
+            <div class="lc-name">Klepon Ubi Ungu</div>
+            <div class="lc-store">📍 Jajanan Tradisional Sari</div>
+            <div class="lc-tags"><span class="tag tag-new">BARU</span><span class="tag tag-promo">DISKON 44%</span></div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-orig">Rp18k</div>
+            <div class="lc-price">Rp10k</div>
+            <button class="add-btn" onclick="event.stopPropagation();addCart()">+ Pesan</button>
+          </div>
+        </div>
+        <div class="list-card" data-cat="minuman" onclick="openModal(this)" data-name="Jus Alpukat Kental" data-store="Jus Segar Pak Hendra" data-emoji="🥑" data-bg="bg-green" data-price="12000" data-orig="20000" data-rating="4.7" data-sold="143" data-est="8 mnt" data-desc="Jus alpukat kental premium dengan susu kental manis coklat dan madu asli. Segar dan bergizi untuk hari-harimu!" data-badge="new">
+          <div class="lc-img bg-green">🥑</div>
+          <div class="lc-info">
+            <div class="lc-name">Jus Alpukat Kental</div>
+            <div class="lc-store">📍 Jus Segar Pak Hendra</div>
+            <div class="lc-tags"><span class="tag tag-new">BARU</span><span class="tag tag-free">GRATIS TOPPING</span></div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-orig">Rp20k</div>
+            <div class="lc-price">Rp12k</div>
+            <button class="add-btn" onclick="event.stopPropagation();addCart()">+ Pesan</button>
+          </div>
+        </div>
+        <div class="list-card" data-cat="sarapan" onclick="openModal(this)" data-name="Lontong Sayur Medan" data-store="Sarapan Kak Dewi" data-emoji="🥗" data-bg="bg-teal" data-price="10000" data-orig="17000" data-rating="4.8" data-sold="322" data-est="10 mnt" data-desc="Lontong sayur khas Medan dengan kuah santan kental, kacang panjang, tauge, dan sambal hijau spesial. Wajib sarapan!" data-badge="new">
+          <div class="lc-img bg-teal">🥗</div>
+          <div class="lc-info">
+            <div class="lc-name">Lontong Sayur Medan</div>
+            <div class="lc-store">📍 Sarapan Kak Dewi</div>
+            <div class="lc-tags"><span class="tag tag-new">BARU</span><span class="tag tag-promo">DISKON 41%</span></div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-orig">Rp17k</div>
+            <div class="lc-price">Rp10k</div>
+            <button class="add-btn" onclick="event.stopPropagation();addCart()">+ Pesan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="height:16px"></div>
+  </div><!-- end app-content -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" id="nav0" onclick="navSwitch(0)">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Beranda</span>
+    </button>
+    <button class="nav-btn" id="nav1" onclick="navSwitch(1)">
+      <span class="nav-icon">🔍</span>
+      <span class="nav-label">Cari</span>
+    </button>
+    <button class="nav-btn" id="nav2" onclick="navSwitch(2);showToast('🛒 Keranjang kamu')">
+      <div class="nav-center">🛒</div>
+      <span class="nav-badge" id="cartBadge" style="display:none">0</span>
+    </button>
+    <button class="nav-btn" id="nav3" onclick="navSwitch(3)">
+      <span class="nav-icon">❤️</span>
+      <span class="nav-label">Favorit</span>
+    </button>
+    <button class="nav-btn" id="nav4" onclick="navSwitch(4)">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">Profil</span>
+    </button>
+  </div>
+</div>
+
+<!-- ========== MODAL ========== -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-sheet" id="modalSheet">
+    <div class="modal-handle-wrap"><div class="modal-handle"></div></div>
+    <div class="modal-img-big" id="mImg">🍛</div>
+    <div class="modal-body">
+      <div class="modal-badges" id="mBadges"></div>
+      <div class="modal-name" id="mName">Nama Produk</div>
+      <div class="modal-store" id="mStore">📍 Nama Toko</div>
+      <div class="modal-stats">
+        <div class="modal-stat"><div class="modal-stat-val" id="mRating">4.9</div><div class="modal-stat-key">⭐ Rating</div></div>
+        <div class="modal-stat"><div class="modal-stat-val" id="mSold">0</div><div class="modal-stat-key">🛒 Terjual</div></div>
+        <div class="modal-stat"><div class="modal-stat-val" id="mEst">10 mnt</div><div class="modal-stat-key">⏱ Estimasi</div></div>
+      </div>
+      <div class="modal-desc-title">Deskripsi</div>
+      <div class="modal-desc-text" id="mDesc">—</div>
+      <div class="modal-price-row">
+        <div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:2px;">Harga Promo</div>
+          <div class="modal-price" id="mPrice">Rp15k</div>
+          <div class="modal-orig" id="mOrig">Rp25k</div>
+        </div>
+        <div class="modal-disc" id="mDisc">-40%</div>
+      </div>
+      <div class="modal-cta">
+        <button class="btn-wish" id="wishBtn" onclick="toggleWish()">🤍</button>
+        <button class="btn-order" onclick="doOrder()">🛒 Pesan Sekarang</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ---- STATE ----
+let currentSlide = 0;
+let cartCount = 0;
+let userName = '';
+let wishlist = new Set();
+
+// ---- SPLASH ----
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const seen = localStorage.getItem('umkm_seen');
+    goTo(seen ? 'login' : 'onboard');
+  }, 2200);
+});
+
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ---- ONBOARDING ----
+function onboardNext() {
+  if (currentSlide < 2) {
+    document.getElementById('slide' + currentSlide).classList.add('exit');
+    setTimeout(() => document.getElementById('slide' + currentSlide).classList.remove('active', 'exit'), 350);
+    currentSlide++;
+    setTimeout(() => document.getElementById('slide' + currentSlide).classList.add('active'), 50);
+    document.querySelectorAll('.dots .dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+    if (currentSlide === 2) document.getElementById('onboardNextBtn').textContent = 'Masuk Sekarang →';
+    document.getElementById('onboardSkipBtn').style.display = currentSlide === 2 ? 'none' : '';
+  } else {
+    goLogin();
+  }
+}
+function goLogin() {
+  localStorage.setItem('umkm_seen', '1');
+  goTo('login');
+}
+
+// ---- LOGIN ----
+function togglePass() {
+  const inp = document.getElementById('loginPass');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+function doLogin() {
+  const phone = document.getElementById('loginPhone').value.trim();
+  if (!phone) { showToast('⚠️ Masukkan nomor HP atau email'); return; }
+  const pass = document.getElementById('loginPass').value.trim();
+  if (!pass) { showToast('⚠️ Masukkan password'); return; }
+  showToast('⏳ Memverifikasi...');
+  userName = phone.includes('@') ? phone.split('@')[0] : phone;
+  setTimeout(() => launchApp(), 1200);
+}
+function doSocialLogin(provider) {
+  showToast('⏳ Masuk dengan ' + provider + '...');
+  userName = 'Pengguna';
+  setTimeout(() => launchApp(), 1200);
+}
+function launchApp() {
+  document.getElementById('userName').textContent = userName || 'Pengguna';
+  document.getElementById('userAvatar').textContent = (userName || 'U')[0].toUpperCase();
+  goTo('app');
+  showToast('✅ Selamat datang, ' + (userName || 'Pengguna') + '!');
+}
+
+// ---- CATEGORIES ----
+function filterCat(btn, cat) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('[data-cat]').forEach(el => {
+    el.style.display = (cat === 'semua' || el.dataset.cat === cat) ? '' : 'none';
+  });
+}
+
+// ---- LIVE SEARCH ----
+function liveSearch() {
+  const q = document.getElementById('searchInp').value.toLowerCase();
+  document.querySelectorAll('[data-name]').forEach(el => {
+    const match = !q || el.dataset.name.toLowerCase().includes(q) || (el.dataset.store || '').toLowerCase().includes(q);
+    el.style.display = match ? '' : 'none';
+  });
+}
+
+// ---- MODAL ----
+function openModal(el) {
+  const d = el.dataset;
+  document.getElementById('mImg').textContent = d.emoji;
+  document.getElementById('mImg').className = 'modal-img-big ' + d.bg;
+  document.getElementById('mName').textContent = d.name;
+  document.getElementById('mStore').textContent = '📍 ' + d.store;
+  document.getElementById('mDesc').textContent = d.desc;
+  document.getElementById('mRating').textContent = d.rating;
+  document.getElementById('mSold').textContent = d.sold + '+';
+  document.getElementById('mEst').textContent = d.est;
+  const price = parseInt(d.price);
+  const orig = parseInt(d.orig);
+  const disc = Math.round((1 - price / orig) * 100);
+  document.getElementById('mPrice').textContent = 'Rp' + (price/1000).toFixed(0) + '.000';
+  document.getElementById('mOrig').textContent = 'Rp' + (orig/1000).toFixed(0) + '.000';
+  document.getElementById('mDisc').textContent = '-' + disc + '%';
+  const badges = document.getElementById('mBadges');
+  badges.innerHTML = d.badge === 'new'
+    ? '<span class="modal-badge" style="background:#FFF3E0;color:#E65100">🆕 Grand Opening</span>'
+    : '<span class="modal-badge" style="background:#FFEBEE;color:#C62828">🔥 Terlaris</span>';
+  document.getElementById('wishBtn').textContent = wishlist.has(d.name) ? '❤️' : '🤍';
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  window._curModal = d;
+}
+function closeModal(e) {
+  if (e.target.id === 'modalOverlay') _closeModal();
+}
+function _closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleWish() {
+  const name = window._curModal?.name;
+  if (!name) return;
+  if (wishlist.has(name)) { wishlist.delete(name); document.getElementById('wishBtn').textContent = '🤍'; showToast('💔 Dihapus dari favorit'); }
+  else { wishlist.add(name); document.getElementById('wishBtn').textContent = '❤️'; showToast('❤️ Ditambahkan ke favorit!'); }
+}
+function doOrder() {
+  _closeModal();
+  addCart();
+}
+function addCart() {
+  cartCount++;
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = cartCount;
+  badge.style.display = 'flex';
+  showToast('✅ Ditambahkan ke keranjang!');
+}
+
+function toggleFav(btn) {
+  btn.textContent = btn.textContent === '🤍' ? '❤️' : '🤍';
+  showToast(btn.textContent === '❤️' ? '❤️ Disimpan ke favorit!' : '💔 Dihapus dari favorit');
+}
+
+// ---- NAV ----
+function navSwitch(i) {
+  document.querySelectorAll('.nav-btn').forEach((b, j) => b.classList.toggle('active', j === i));
+  if (i === 1) { setTimeout(() => document.getElementById('searchInp').focus(), 300); }
+  if (i === 3) showToast('❤️ ' + wishlist.size + ' item favorit kamu');
+  if (i === 4) showToast('👤 Profil: ' + (userName || 'Pengguna'));
+}
+
+// ---- TOAST ----
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+</script>
+</body>
+</html>
